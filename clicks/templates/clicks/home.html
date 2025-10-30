@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro de Cliques</title>
+  <script>
+    async function registrarClique(nomeElemento) {
+      await fetch("/register_click/", {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": getCookie("csrftoken"),
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `element_name=${nomeElemento}`
+      });
+    }
+
+    // Função pra pegar o token CSRF (obrigatório no Django)
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+          cookie = cookie.trim();
+          if (cookie.startsWith(name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+  </script>
+</head>
+<body>
+  <h1>Página de Teste — Rastreamento de Cliques</h1>
+  <button onclick="registrarClique('Configurações')">Aba de Configurações</button>
+  <button onclick="registrarClique('Perfil')">Aba de Perfil</button>
+  <button onclick="registrarClique('Ajuda')">Aba de Ajuda</button>
+</body>
+</html>
